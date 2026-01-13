@@ -30,51 +30,44 @@ const App: React.FC = () => {
   );
 
   const handleLoadGeojson = (file: File) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const data: GeoJSONData = JSON.parse(e.target?.result as string);
-        setGeojsonData(data);
-        setStats(calculateStats(data));
-
-        // Calcular bounds para la imagen
-        const bounds = calculateBounds(data);
-        if (bounds) {
-          const sw = bounds.getSouthWest();
-          const ne = bounds.getNorthEast();
-          setImageBounds([
-            [sw.lat, sw.lng],
-            [ne.lat, ne.lng],
-          ]);
-        }
-      } catch (err) {
-        alert("Error al cargar GeoJSON");
-      }
-    };
-    reader.readAsText(file);
-  };
-
-  const handleLoadImage = async (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-
+  const reader = new FileReader();
+  reader.onload = (e) => {
     try {
-      const res = await fetch("http://localhost:8000/convert-orthomosaic", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!res.ok) throw new Error("Error en el backend");
-
-      const data = await res.json();
-
-      setImageUrl(data.image_url);
-      setImageBounds(data.bounds);
-    } catch (err) {
-      alert("No se pudo cargar el ortomosaico");
-      console.error(err);
+      const data: GeoJSONData = JSON.parse(e.target?.result as string);
+      setGeojsonData(data);
+      setStats(calculateStats(data));
+    } catch {
+      alert("Error al cargar GeoJSON");
     }
   };
+  reader.readAsText(file);
+};
+
+
+  const handleLoadImage = async (file: File) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const res = await fetch("http://localhost:8000/convert-orthomosaic", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) throw new Error("Error en el backend");
+
+    const data = await res.json();
+
+    // 🔥 USAR LO QUE DEVUELVE EL BACKEND
+    setImageUrl(data.image_url);
+    setImageBounds(data.bounds);
+
+  } catch (err) {
+    alert("No se pudo cargar el ortomosaico");
+    console.error(err);
+  }
+};
+
 
   return (
     <div style={styles.app}>

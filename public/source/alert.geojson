@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-56.1648, -34.901]
+      },
+      "properties": {
+        "nivel": "alto",
+        "color": "red",
+        "titulo": "Persona sin casco",
+        "descripcion": "Se detectó una persona sin casco en zona de maquinaria pesada.",
+        "confianza": 0.92
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-56.1642, -34.9013]
+      },
+      "properties": {
+        "nivel": "alto",
+        "color": "red",
+        "titulo": "Vehículo en zona restringida",
+        "descripcion": "Camión ingresó a un área no habilitada.",
+        "confianza": 0.89
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-56.1637, -34.9007]
+      },
+      "properties": {
+        "nivel": "medio",
+        "color": "yellow",
+        "titulo": "Persona sin chaleco",
+        "descripcion": "Persona detectada sin chaleco reflectivo.",
+        "confianza": 0.76
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-56.1653, -34.9006]
+      },
+      "properties": {
+        "nivel": "medio",
+        "color": "yellow",
+        "titulo": "Zona con iluminación deficiente",
+        "descripcion": "Área con baja visibilidad detectada.",
+        "confianza": 0.81
+      }
+    }
+  ]
+}
