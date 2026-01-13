@@ -60,7 +60,10 @@ const App: React.FC = () => {
 
     // 🔥 USAR LO QUE DEVUELVE EL BACKEND
     setImageUrl(data.image_url);
-    setImageBounds(data.bounds);
+    setImageBounds([
+        [-34.9020, -56.1655], 
+        [-34.8990, -56.1605],
+        ]);
 
   } catch (err) {
     alert("No se pudo cargar el ortomosaico");
