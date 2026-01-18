@@ -41,7 +41,7 @@ export const Toolbar: React.FC<Props> = ({
       <input
         ref={imageRef}
         type="file"
-        accept="image/*"
+        accept=".tif,.tiff,.geotiff"
         style={{ display: "none" }}
         onChange={(e) => e.target.files?.[0] && onLoadImage(e.target.files[0])}
       />
