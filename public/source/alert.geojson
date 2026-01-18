@@ -5,13 +5,13 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-56.1648, -34.901]
+        "coordinates": [-81.752, 41.3042]
       },
       "properties": {
         "nivel": "alto",
         "color": "red",
         "titulo": "Persona sin casco",
-        "descripcion": "Se detectó una persona sin casco en zona de maquinaria pesada.",
+        "descripcion": "Se detecto a Michel sin casco en zona de maquinaria pesada.",
         "confianza": 0.92
       }
     },
@@ -19,13 +19,13 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-56.1642, -34.9013]
+        "coordinates": [-81.751, 41.3048]
       },
       "properties": {
         "nivel": "alto",
         "color": "red",
-        "titulo": "Vehículo en zona restringida",
-        "descripcion": "Camión ingresó a un área no habilitada.",
+        "titulo": "Vehiculo en zona restringida",
+        "descripcion": "Camion ingreso a un area no habilitada.",
         "confianza": 0.89
       }
     },
@@ -33,7 +33,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-56.1637, -34.9007]
+        "coordinates": [-81.7505, 41.3045]
       },
       "properties": {
         "nivel": "medio",
@@ -47,13 +47,13 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-56.1653, -34.9006]
+        "coordinates": [-81.7515, 41.305]
       },
       "properties": {
         "nivel": "medio",
         "color": "yellow",
-        "titulo": "Zona con iluminación deficiente",
-        "descripcion": "Área con baja visibilidad detectada.",
+        "titulo": "Zona con iluminacion deficiente",
+        "descripcion": "Area con baja visibilidad detectada.",
         "confianza": 0.81
       }
     }
