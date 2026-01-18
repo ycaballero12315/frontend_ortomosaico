@@ -26,52 +26,63 @@ const App: React.FC = () => {
   const [showLegend, setShowLegend] = useState(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [imageBounds, setImageBounds] = useState<L.LatLngBoundsLiteral | null>(
-    null
+    null,
   );
 
   const handleLoadGeojson = (file: File) => {
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const data: GeoJSONData = JSON.parse(e.target?.result as string);
-      setGeojsonData(data);
-      setStats(calculateStats(data));
-    } catch {
-      alert("Error al cargar GeoJSON");
-    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data: GeoJSONData = JSON.parse(e.target?.result as string);
+        console.log("✅ GeoJSON cargado:", data);
+        setGeojsonData(data);
+        setStats(calculateStats(data));
+      } catch (err) {
+        console.error("Error parseando GeoJSON:", err);
+        alert("Error al cargar GeoJSON");
+      }
+    };
+    reader.readAsText(file);
   };
-  reader.readAsText(file);
-};
-
 
   const handleLoadImage = async (file: File) => {
-  const formData = new FormData();
-  formData.append("file", file);
+    const formData = new FormData();
+    formData.append("file", file);
 
-  try {
-    const res = await fetch("http://localhost:8000/convert-orthomosaic", {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const res = await fetch("http://localhost:8000/convert-orthomosaic", {
+        method: "POST",
+        body: formData,
+      });
 
-    if (!res.ok) throw new Error("Error en el backend");
+      if (!res.ok) {
+        const errrText = await res.text();
+        console.error("Error del backend:", errrText);
+        throw new Error("Error en el backend");
+      }
 
-    const data = await res.json();
+      const data = await res.json();
+      console.log("Backend response", data);
 
-    // 🔥 USAR LO QUE DEVUELVE EL BACKEND
-    setImageUrl(data.image_url);
-    setImageBounds([
-        [-34.9020, -56.1655], 
-        [-34.8990, -56.1605],
+      if (data.bounds && data.bounds.length === 2) {
+        setImageBounds(data.bounds);
+        console.log("Imagen y bounds configurados:", {
+          url: data.image_url,
+          bounds: data.bounds,
+        });
+      } else {
+        console.warn("Backend no devolvió bounds, usando fallback UTM 17N"); // ⭐ NUEVO
+        setImageUrl(data.image_url);
+        setImageBounds([
+          [41.304, -81.0],
+          [41.308, -80.996],
         ]);
-
-  } catch (err) {
-    alert("No se pudo cargar el ortomosaico");
-    console.error(err);
-  }
-};
-
-
+      }
+    } catch (err) {
+      console.error("Error completo", err);
+      alert("No se pudo cargar el ortomosaico" + err);
+    }
+  };
   return (
     <div style={styles.app}>
       <Header />
