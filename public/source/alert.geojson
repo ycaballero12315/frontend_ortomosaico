@@ -5,7 +5,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-81.752, 41.3042]
+        "coordinates": [-81.7528, 41.3042]
       },
       "properties": {
         "nivel": "alto",
@@ -19,7 +19,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-81.751, 41.3048]
+        "coordinates": [-81.7518, 41.3048]
       },
       "properties": {
         "nivel": "alto",
@@ -33,7 +33,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-81.7505, 41.3045]
+        "coordinates": [-81.7513, 41.3045]
       },
       "properties": {
         "nivel": "medio",
@@ -47,7 +47,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [-81.7515, 41.305]
+        "coordinates": [-81.7523, 41.305]
       },
       "properties": {
         "nivel": "medio",
