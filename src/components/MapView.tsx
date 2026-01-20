@@ -1,14 +1,13 @@
 import {
   MapContainer,
   TileLayer,
-  GeoJSON,
   ImageOverlay,
-  useMap,
+  useMap, 
   Marker,
-  Popup,
+  Popup
 } from "react-leaflet";
 import L from "leaflet";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 const FitBounds: React.FC<{ bounds: L.LatLngBoundsLiteral }> = ({ bounds }) => {
   const map = useMap();
@@ -24,22 +23,71 @@ interface Props {
 const createCustomIcon = (color: string, nivel: string) => {
   const iconColor = color === "red" ? "#ef4444" : "#eab308";
   const borderColor = color === "red" ? "#dc2626" : "#ca8a04";
+  const emoji = nivel === "alto" ? "⚠️" : "⚡";
 
-  const svgIcon = `
-    <svg width="40" height="50" viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg">
-      <line x1="5" y1="5" x2="5" y2="48" stroke="#374151" stroke-width="2"/>
-      <path d="M 5 5 L 35 12 L 35 20 L 5 27 Z" fill="${iconColor}" stroke="${borderColor}" stroke-width="1.5"/>
-      ${
-        nivel === "alto"
-          ? '<text x="20" y="18" font-size="12" fill="white" text-anchor="middle" font-weight="bold">⚠️</text>'
-          : '<text x="20" y="18" font-size="12" fill="white" text-anchor="middle" font-weight="bold">⚡</text>'
-      }
-      <circle cx="5" cy="48" r="3" fill="#374151"/>
-    </svg>
+  const htmlIcon = `
+    <div style="position: relative; width: 40px; height: 50px;">
+      <style>
+        @keyframes wave {
+          0%, 100% { 
+            d: path("M 5 5 Q 20 3 35 5 L 35 25 Q 20 27 5 25 Z"); 
+          }
+          25% { 
+            d: path("M 5 5 Q 20 7 35 5 L 35 25 Q 20 23 5 25 Z"); 
+          }
+          50% { 
+            d: path("M 5 5 Q 20 3 35 5 L 35 25 Q 20 27 5 25 Z"); 
+          }
+          75% { 
+            d: path("M 5 5 Q 20 7 35 5 L 35 25 Q 20 23 5 25 Z"); 
+          }
+        }
+      </style>
+      <svg width="40" height="50" viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="shadow-${color}">
+            <feDropShadow dx="1" dy="1" stdDeviation="1" flood-opacity="0.3"/>
+          </filter>
+        </defs>
+        
+        <!-- Asta de la bandera -->
+        <line x1="5" y1="5" x2="5" y2="48" stroke="#374151" stroke-width="2.5" stroke-linecap="round"/>
+        
+        <!-- Bandera ondeante -->
+        <path fill="${iconColor}" stroke="${borderColor}" stroke-width="1.5" filter="url(#shadow-${color})">
+          <animate 
+            attributeName="d" 
+            values="
+              M 5 5 Q 20 3 35 5 L 35 25 Q 20 27 5 25 Z;
+              M 5 5 Q 20 7 35 5 L 35 25 Q 20 23 5 25 Z;
+              M 5 5 Q 20 3 35 5 L 35 25 Q 20 27 5 25 Z;
+              M 5 5 Q 20 7 35 5 L 35 25 Q 20 23 5 25 Z;
+              M 5 5 Q 20 3 35 5 L 35 25 Q 20 27 5 25 Z
+            "
+            dur="2s" 
+            repeatCount="indefinite"
+          />
+        </path>
+        
+        <!-- Emoji en la bandera -->
+        <text x="20" y="18" font-size="12" text-anchor="middle" style="pointer-events: none;">
+          <animate 
+            attributeName="x" 
+            values="20;21;20;19;20" 
+            dur="2s" 
+            repeatCount="indefinite"
+          />
+          ${emoji}
+        </text>
+        
+        <!-- Base del asta -->
+        <circle cx="5" cy="48" r="3" fill="#374151"/>
+      </svg>
+    </div>
   `;
 
   return L.divIcon({
-    html: svgIcon,
+    html: htmlIcon,
     className: "custom-flag-marker",
     iconSize: [40, 50],
     iconAnchor: [5, 48],
@@ -103,34 +151,17 @@ export const MapView: React.FC<Props> = ({
         <ImageOverlay url={imageUrl} bounds={imageBounds} opacity={0.85} />
       )}
 
-      {geojsonData && (
-        <GeoJSON
-          data={geojsonData}
-          pointToLayer={(feature, latlng) => {
-            const color = feature.properties.color;
-
-            return L.circleMarker(latlng, {
-              radius: 10,
-              fillColor: color,
-              color: "#000",
-              weight: 1,
-              opacity: 1,
-              fillOpacity: 0.9,
-            });
-          }}
-          onEachFeature={(feature, layer) => {
-            const p = feature.properties;
-
-            layer.bindPopup(`
-          <strong>${p.titulo}</strong><br/>
-          <b>Nivel:</b> ${p.nivel.toUpperCase()}<br/>
-          <b>Confianza:</b> ${(p.confianza * 100).toFixed(1)}%<br/>
-          <hr/>
-          ${p.descripcion}
-      `);
-          }}
-        />
-      )}
+      {markers.map((marker: any) => (
+  <Marker 
+    key={marker.key} 
+    position={marker.position} 
+    icon={marker.icon}
+  >
+    <Popup>
+      <div dangerouslySetInnerHTML={{ __html: marker.popup }} />
+    </Popup>
+  </Marker>
+))}
     </MapContainer>
   );
 };
