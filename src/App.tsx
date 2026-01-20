@@ -50,7 +50,7 @@ const App: React.FC = () => {
     formData.append("file", file);
 
     try {
-      const res = await fetch("http://localhost:8000/convert-orthomosaic", {
+      const res = await fetch("http://localhost:4010/convert-orthomosaic", {
         method: "POST",
         body: formData,
       });
